@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Animated Stats</title>
+    <link rel="stylesheet" href="../static/css/effects.css">
+    <link id="theme-css" rel="stylesheet" href="../static/css/theme-notion.css">
+    <style>
+        html, body {
+            width: 1920px;
+            height: 1080px;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            overflow: hidden;
+        }
+        .container {
+            position: relative;
+            width: 1920px;
+            height: 1080px;
+        }
+
+        .animated-stats {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 24px 40px;
+            opacity: 0;
+        }
+
+        .animated-stats .prefix {
+            font-size: 18px;
+            opacity: 0.7;
+        }
+
+        .animated-stats .number-row {
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+        }
+
+        .animated-stats .number {
+            font-size: 72px;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .animated-stats .unit {
+            font-size: 32px;
+            font-weight: 500;
+        }
+
+        .animated-stats .label {
+            font-size: 20px;
+            opacity: 0.8;
+        }
+
+        /* Theme: Notion */
+        .animated-stats.theme-notion {
+            background: rgba(255, 253, 247, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .animated-stats.theme-notion .prefix {
+            color: #787774;
+            font-family: -apple-system, sans-serif;
+        }
+        .animated-stats.theme-notion .number {
+            color: #E16259;
+            font-family: "Georgia", serif;
+        }
+        .animated-stats.theme-notion .unit {
+            color: #E16259;
+            font-family: "Georgia", serif;
+        }
+        .animated-stats.theme-notion .label {
+            color: #37352F;
+            font-family: -apple-system, "PingFang SC", sans-serif;
+        }
+
+        /* Theme: Cyberpunk */
+        .animated-stats.theme-cyberpunk {
+            background: rgba(13, 13, 13, 0.95);
+            border: 1px solid #00F5FF;
+            border-radius: 4px;
+        }
+        .animated-stats.theme-cyberpunk .prefix {
+            color: #888;
+            font-family: "Courier New", monospace;
+        }
+        .animated-stats.theme-cyberpunk .number {
+            color: #00F5FF;
+            font-family: "Orbitron", sans-serif;
+            text-shadow: 0 0 20px #00F5FF;
+        }
+        .animated-stats.theme-cyberpunk .unit {
+            color: #FF00FF;
+            font-family: "Orbitron", sans-serif;
+        }
+        .animated-stats.theme-cyberpunk .label {
+            color: #FFF;
+            font-family: -apple-system, sans-serif;
+        }
+
+        /* Theme: Apple */
+        .animated-stats.theme-apple {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+        }
+        .animated-stats.theme-apple .prefix {
+            color: #86868B;
+            font-family: -apple-system, "SF Pro Text", sans-serif;
+        }
+        .animated-stats.theme-apple .number {
+            color: #1D1D1F;
+            font-family: -apple-system, "SF Pro Display", sans-serif;
+            font-weight: 600;
+        }
+        .animated-stats.theme-apple .unit {
+            color: #1D1D1F;
+            font-family: -apple-system, "SF Pro Display", sans-serif;
+        }
+        .animated-stats.theme-apple .label {
+            color: #1D1D1F;
+            font-family: -apple-system, "SF Pro Text", sans-serif;
+        }
+
+        /* Theme: Aurora */
+        .animated-stats.theme-aurora {
+            background: rgba(15, 15, 35, 0.9);
+            border-radius: 16px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+        .animated-stats.theme-aurora .prefix {
+            color: #B8B8D0;
+            font-family: -apple-system, sans-serif;
+        }
+        .animated-stats.theme-aurora .number {
+            background: linear-gradient(135deg, #667EEA, #F093FB);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: "Avenir Next", sans-serif;
+        }
+        .animated-stats.theme-aurora .unit {
+            background: linear-gradient(135deg, #F093FB, #F5576C);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: "Avenir Next", sans-serif;
+        }
+        .animated-stats.theme-aurora .label {
+            color: #FFF;
+            font-family: -apple-system, "PingFang SC", sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="animatedStats" class="animated-stats theme-notion">
+            <div class="prefix" id="prefixText"></div>
+            <div class="number-row">
+                <span class="number" id="numberText">0</span>
+                <span class="unit" id="unitText"></span>
+            </div>
+            <div class="label" id="labelText"></div>
+        </div>
+    </div>
+
+    <script src="../static/js/anime.min.js"></script>
+    <script>
+        let config = {
+            prefix: "增长率",
+            number: 240,
+            unit: "%",
+            label: "计算能力年增长",
+            theme: "notion",
+            position: { x: 960, y: 540 },
+            durationMs: 4000
+        };
+
+        let animation = null;
+        let numberAnimation = null;
+
+        function initAnimation(cfg) {
+            config = cfg || config;
+
+            const container = document.getElementById('animatedStats');
+            const prefixEl = document.getElementById('prefixText');
+            const numberEl = document.getElementById('numberText');
+            const unitEl = document.getElementById('unitText');
+            const labelEl = document.getElementById('labelText');
+
+            prefixEl.textContent = config.prefix || '';
+            prefixEl.style.display = config.prefix ? 'block' : 'none';
+            numberEl.textContent = '0';
+            unitEl.textContent = config.unit || '';
+            labelEl.textContent = config.label || '';
+            labelEl.style.display = config.label ? 'block' : 'none';
+
+            container.className = `animated-stats theme-${config.theme || 'notion'}`;
+            container.style.left = `${config.position.x - 100}px`;
+            container.style.top = `${config.position.y - 80}px`;
+
+            const totalDuration = config.durationMs;
+            const exitStart = totalDuration - 500;
+            const targetNumber = config.number;
+
+            animation = anime.timeline({
+                autoplay: false,
+                easing: 'linear'
+            });
+
+            // Container appears
+            animation.add({
+                targets: container,
+                opacity: [0, 1],
+                scale: [0.9, 1],
+                duration: 400,
+                easing: 'easeOutQuad'
+            }, 0);
+
+            // Number counting animation
+            const numberObj = { value: 0 };
+            animation.add({
+                targets: numberObj,
+                value: [0, targetNumber],
+                duration: 1500,
+                easing: 'easeOutExpo',
+                round: 1,
+                update: function() {
+                    numberEl.textContent = Math.round(numberObj.value);
+                }
+            }, 200);
+
+            // Exit
+            animation.add({
+                targets: container,
+                opacity: [1, 0],
+                scale: [1, 0.95],
+                duration: 400,
+                easing: 'easeInQuad'
+            }, exitStart);
+
+            return animation;
+        }
+
+        function seekTo(timeMs) {
+            if (animation) animation.seek(timeMs);
+        }
+
+        function getDuration() {
+            return animation ? animation.duration : config.durationMs;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => initAnimation(config));
+    </script>
+</body>
+</html>

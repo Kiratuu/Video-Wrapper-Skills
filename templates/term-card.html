@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Term Definition Card</title>
+    <link rel="stylesheet" href="../static/css/effects.css">
+    <link id="theme-css" rel="stylesheet" href="../static/css/theme-notion.css">
+    <style>
+        html, body {
+            width: 1920px;
+            height: 1080px;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            overflow: hidden;
+        }
+        .container {
+            position: relative;
+            width: 1920px;
+            height: 1080px;
+        }
+        .term-card {
+            --border-angle: 0deg;
+        }
+        /* Import web fonts for themes */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700&display=swap');
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="termCard" class="term-card animate-init">
+            <div class="title" id="cardTitle"></div>
+            <div class="subtitle" id="cardSubtitle"></div>
+            <div class="description" id="cardDescription"></div>
+        </div>
+    </div>
+
+    <script src="../static/js/anime.min.js"></script>
+    <script>
+        // Configuration will be injected by Playwright
+        let config = {
+            chinese: "人工智能",
+            english: "Artificial Intelligence",
+            description: "人工智能是计算机科学的一个分支，致力于创建能够执行通常需要人类智能的任务的系统。",
+            theme: "notion",
+            position: { x: 1470, y: 50 },
+            durationMs: 6000
+        };
+
+        // Animation instance
+        let animation = null;
+        let borderAnimation = null;
+
+        // Available themes
+        const themes = ['cyberpunk', 'apple', 'notion', 'aurora'];
+
+        function setTheme(themeName) {
+            const themeLink = document.getElementById('theme-css');
+            if (themes.includes(themeName)) {
+                themeLink.href = `../static/css/theme-${themeName}.css`;
+            }
+        }
+
+        function initAnimation(cfg) {
+            config = cfg || config;
+
+            // Set theme
+            if (config.theme) {
+                setTheme(config.theme);
+            }
+
+            const cardEl = document.getElementById('termCard');
+            const titleEl = document.getElementById('cardTitle');
+            const subtitleEl = document.getElementById('cardSubtitle');
+            const descEl = document.getElementById('cardDescription');
+
+            // Set content
+            titleEl.textContent = config.chinese;
+            subtitleEl.textContent = config.english;
+            descEl.textContent = config.description;
+
+            // Set theme class
+            cardEl.className = `term-card theme-${config.theme || 'notion'} animate-init`;
+
+            // Set initial position
+            cardEl.style.left = `${config.position.x}px`;
+            cardEl.style.top = `${config.position.y}px`;
+
+            // Calculate animation durations
+            const totalDuration = config.durationMs;
+            const enterDuration = 600;
+            const exitStart = totalDuration - 500;
+            const exitDuration = 500;
+
+            // Theme-specific animation adjustments
+            let enterTranslateX = [100, 0];
+            let enterScale = [0.8, 1.0];
+            let breatheX = [0, 3, 0, -2, 0];
+
+            if (config.theme === 'apple') {
+                // Apple: subtle, elegant
+                enterTranslateX = [50, 0];
+                enterScale = [0.95, 1.0];
+                breatheX = [0, 0, 0, 0, 0];
+            } else if (config.theme === 'notion') {
+                // Notion: bouncy, playful
+                enterTranslateX = [80, 0];
+                enterScale = [0.9, 1.0];
+                breatheX = [0, 2, 0, -1, 0];
+            } else if (config.theme === 'cyberpunk') {
+                // Cyberpunk: glitchy
+                enterTranslateX = [120, 0];
+                enterScale = [0.85, 1.0];
+                breatheX = [0, 4, -2, 3, 0];
+            }
+
+            // Create main timeline animation
+            animation = anime.timeline({
+                autoplay: false,
+                easing: 'linear'
+            });
+
+            // Enter animation
+            animation.add({
+                targets: cardEl,
+                opacity: [0, 1],
+                translateX: enterTranslateX,
+                scale: enterScale,
+                duration: enterDuration,
+                easing: 'spring(1, 180, 15, 0)'
+            }, 0);
+
+            // Breathing effect
+            animation.add({
+                targets: cardEl,
+                translateX: breatheX,
+                duration: totalDuration - enterDuration - exitDuration,
+                easing: 'easeInOutSine',
+                loop: true
+            }, enterDuration);
+
+            // Exit animation
+            animation.add({
+                targets: cardEl,
+                opacity: [1, 0],
+                translateX: [0, 50],
+                scale: [1.0, 0.95],
+                duration: exitDuration,
+                easing: 'easeInQuad'
+            }, exitStart);
+
+            // Border animation for themes that use it
+            if (config.theme === 'cyberpunk' || config.theme === 'aurora') {
+                borderAnimation = anime({
+                    targets: cardEl,
+                    '--border-angle': ['0deg', '360deg'],
+                    duration: config.theme === 'aurora' ? 4000 : 3000,
+                    easing: 'linear',
+                    loop: true,
+                    autoplay: false
+                });
+            }
+
+            return animation;
+        }
+
+        // Seek to specific time
+        function seekTo(timeMs) {
+            if (animation) {
+                animation.seek(timeMs);
+            }
+            if (borderAnimation) {
+                const borderDuration = borderAnimation.duration;
+                borderAnimation.seek(timeMs % borderDuration);
+            }
+        }
+
+        // Get total duration
+        function getDuration() {
+            return animation ? animation.duration : config.durationMs;
+        }
+
+        // Initialize with default config on load
+        document.addEventListener('DOMContentLoaded', () => {
+            initAnimation(config);
+        });
+    </script>
+</body>
+</html>

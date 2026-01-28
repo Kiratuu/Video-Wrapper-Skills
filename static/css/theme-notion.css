@@ -1,0 +1,109 @@
+/**
+ * Notion Style Theme
+ * 温暖的奶油色调，手写风格，知识分享感
+ */
+
+:root {
+    --primary: #37352F;
+    --secondary: #9B9A97;
+    --accent: #E16259;
+    --accent-yellow: #DFAB01;
+    --accent-blue: #0B6E99;
+    --bg-cream: #FFFDF7;
+    --bg-card: rgba(255, 253, 247, 0.95);
+    --bg-highlight: #FBF3DB;
+    --text-dark: #37352F;
+    --text-muted: #787774;
+}
+
+/* ===== Fancy Text - Notion ===== */
+
+.fancy-text.theme-notion {
+    font-family: "Georgia", "Noto Serif SC", "Source Han Serif CN", serif;
+    font-weight: 700;
+    letter-spacing: 0;
+}
+
+/* 带背景色块的花字 */
+.fancy-text.theme-notion.style-emphasis {
+    color: var(--text-dark);
+    background: linear-gradient(180deg, transparent 50%, #FBF3DB 50%);
+    padding: 0 8px;
+    -webkit-text-stroke: none;
+    text-shadow: none;
+    transform: rotate(-1deg);
+}
+
+.fancy-text.theme-notion.style-term {
+    color: var(--accent);
+    background: linear-gradient(180deg, transparent 60%, rgba(225, 98, 89, 0.2) 60%);
+    padding: 0 8px;
+    -webkit-text-stroke: none;
+    text-shadow: none;
+    transform: rotate(0.5deg);
+}
+
+.fancy-text.theme-notion.style-number {
+    color: var(--accent-blue);
+    background: linear-gradient(180deg, transparent 60%, rgba(11, 110, 153, 0.15) 60%);
+    padding: 0 8px;
+    -webkit-text-stroke: none;
+    text-shadow: none;
+    transform: rotate(-0.5deg);
+}
+
+/* ===== Term Card - Notion ===== */
+
+.term-card.theme-notion {
+    background: var(--bg-card);
+    border: 1px solid rgba(55, 53, 47, 0.1);
+    border-radius: 8px;
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.04),
+        0 4px 12px rgba(0, 0, 0, 0.06);
+    backdrop-filter: none;
+    padding: 20px 24px;
+}
+
+.term-card.theme-notion::before {
+    display: none;
+}
+
+/* 左侧彩色条纹 */
+.term-card.theme-notion::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    bottom: 12px;
+    width: 4px;
+    background: linear-gradient(180deg, var(--accent-yellow), var(--accent));
+    border-radius: 0 2px 2px 0;
+}
+
+.term-card.theme-notion .title {
+    color: var(--text-dark);
+    font-family: "Georgia", "Noto Serif SC", serif;
+    font-weight: 700;
+    font-size: 26px;
+    text-shadow: none;
+    margin-bottom: 4px;
+}
+
+.term-card.theme-notion .subtitle {
+    color: var(--text-muted);
+    font-family: "SF Mono", "Consolas", monospace;
+    font-size: 13px;
+    background: rgba(135, 131, 120, 0.1);
+    padding: 2px 6px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+.term-card.theme-notion .description {
+    color: var(--text-dark);
+    font-family: -apple-system, "PingFang SC", sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    margin-top: 12px;
+}

@@ -1,0 +1,146 @@
+/**
+ * Aurora Gradient Theme
+ * 彩虹渐变流光效果，梦幻极光感
+ */
+
+:root {
+    --gradient-start: #667EEA;
+    --gradient-mid: #764BA2;
+    --gradient-end: #F093FB;
+    --bg-dark: rgba(15, 15, 35, 0.9);
+    --text-light: #FFFFFF;
+    --text-muted: #B8B8D0;
+}
+
+/* ===== Fancy Text - Aurora ===== */
+
+.fancy-text.theme-aurora {
+    font-family: "Avenir Next", "PingFang SC", sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.fancy-text.theme-aurora.style-emphasis {
+    background: linear-gradient(
+        135deg,
+        #667EEA 0%,
+        #764BA2 50%,
+        #F093FB 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 4px 20px rgba(102, 126, 234, 0.5));
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+}
+
+.fancy-text.theme-aurora.style-term {
+    background: linear-gradient(
+        135deg,
+        #F093FB 0%,
+        #F5576C 50%,
+        #FFD194 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 4px 20px rgba(240, 147, 251, 0.5));
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+}
+
+.fancy-text.theme-aurora.style-number {
+    background: linear-gradient(
+        135deg,
+        #4FACFE 0%,
+        #00F2FE 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 4px 20px rgba(79, 172, 254, 0.5));
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+}
+
+/* ===== Term Card - Aurora ===== */
+
+.term-card.theme-aurora {
+    background: var(--bg-dark);
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+    backdrop-filter: blur(12px);
+    position: relative;
+    overflow: visible;
+}
+
+.term-card.theme-aurora::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+        var(--border-angle, 0deg),
+        #667EEA,
+        #764BA2,
+        #F093FB,
+        #F5576C,
+        #667EEA
+    );
+    border-radius: 18px;
+    z-index: -1;
+    animation: auroraFlow 4s linear infinite;
+}
+
+@keyframes auroraFlow {
+    0% { --border-angle: 0deg; filter: hue-rotate(0deg); }
+    100% { --border-angle: 360deg; filter: hue-rotate(360deg); }
+}
+
+/* Fallback for browsers without @property support */
+@supports not (background: linear-gradient(var(--border-angle), red, blue)) {
+    .term-card.theme-aurora::before {
+        background: linear-gradient(45deg, #667EEA, #764BA2, #F093FB, #F5576C);
+        background-size: 400% 400%;
+        animation: auroraShift 4s ease infinite;
+    }
+
+    @keyframes auroraShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+}
+
+.term-card.theme-aurora .title {
+    background: linear-gradient(135deg, #667EEA, #F093FB);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-family: "Avenir Next", "PingFang SC", sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+}
+
+.term-card.theme-aurora .subtitle {
+    color: var(--text-muted);
+    font-family: "SF Mono", monospace;
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+.term-card.theme-aurora .description {
+    color: var(--text-light);
+    font-family: -apple-system, "PingFang SC", sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+/* CSS custom property for border angle */
+@property --border-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Social Bar</title>
+    <link rel="stylesheet" href="../static/css/effects.css">
+    <link id="theme-css" rel="stylesheet" href="../static/css/theme-notion.css">
+    <style>
+        html, body {
+            width: 1920px;
+            height: 1080px;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            overflow: hidden;
+        }
+        .container {
+            position: relative;
+            width: 1920px;
+            height: 1080px;
+        }
+
+        .social-bar {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            opacity: 0;
+        }
+
+        .social-bar .icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-bar .icon svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .social-bar .text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .social-bar .label {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .social-bar .handle {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        /* Theme: Notion */
+        .social-bar.theme-notion {
+            background: rgba(255, 253, 247, 0.95);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .social-bar.theme-notion .icon {
+            color: #1DA1F2;
+        }
+        .social-bar.theme-notion .label {
+            color: #787774;
+            font-family: -apple-system, sans-serif;
+        }
+        .social-bar.theme-notion .handle {
+            color: #37352F;
+            font-family: -apple-system, "PingFang SC", sans-serif;
+        }
+
+        /* Theme: Cyberpunk */
+        .social-bar.theme-cyberpunk {
+            background: rgba(13, 13, 13, 0.95);
+            border: 1px solid #00F5FF;
+        }
+        .social-bar.theme-cyberpunk .icon {
+            color: #00F5FF;
+            filter: drop-shadow(0 0 8px #00F5FF);
+        }
+        .social-bar.theme-cyberpunk .label {
+            color: #888;
+            font-family: "Courier New", monospace;
+        }
+        .social-bar.theme-cyberpunk .handle {
+            color: #00F5FF;
+            font-family: "Orbitron", sans-serif;
+            text-shadow: 0 0 10px #00F5FF;
+        }
+
+        /* Theme: Apple */
+        .social-bar.theme-apple {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+        }
+        .social-bar.theme-apple .icon {
+            color: #1DA1F2;
+        }
+        .social-bar.theme-apple .label {
+            color: #86868B;
+            font-family: -apple-system, "SF Pro Text", sans-serif;
+        }
+        .social-bar.theme-apple .handle {
+            color: #1D1D1F;
+            font-family: -apple-system, "SF Pro Display", sans-serif;
+        }
+
+        /* Theme: Aurora */
+        .social-bar.theme-aurora {
+            background: rgba(15, 15, 35, 0.9);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+        .social-bar.theme-aurora .icon {
+            color: #1DA1F2;
+        }
+        .social-bar.theme-aurora .label {
+            color: #B8B8D0;
+            font-family: -apple-system, sans-serif;
+        }
+        .social-bar.theme-aurora .handle {
+            background: linear-gradient(135deg, #667EEA, #F093FB);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: "Avenir Next", sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="socialBar" class="social-bar theme-notion">
+            <div class="icon" id="iconContainer"></div>
+            <div class="text">
+                <span class="label" id="labelText">关注推特</span>
+                <span class="handle" id="handleText">@username</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="../static/js/anime.min.js"></script>
+    <script>
+        // Platform icons
+        const icons = {
+            twitter: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`,
+            weibo: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M10.098 20.323c-3.977.391-7.414-1.406-7.672-4.02-.259-2.609 2.759-5.047 6.74-5.441 3.979-.394 7.413 1.404 7.671 4.018.259 2.6-2.759 5.049-6.739 5.443z"/></svg>`,
+            youtube: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>`
+        };
+
+        let config = {
+            platform: "twitter",
+            label: "关注推特",
+            handle: "@username",
+            theme: "notion",
+            position: { x: 1600, y: 950 },
+            durationMs: 5000
+        };
+
+        let animation = null;
+
+        function initAnimation(cfg) {
+            config = cfg || config;
+
+            const container = document.getElementById('socialBar');
+            const iconEl = document.getElementById('iconContainer');
+            const labelEl = document.getElementById('labelText');
+            const handleEl = document.getElementById('handleText');
+
+            iconEl.innerHTML = icons[config.platform] || icons.twitter;
+            labelEl.textContent = config.label || '关注';
+            handleEl.textContent = config.handle;
+
+            container.className = `social-bar theme-${config.theme || 'notion'}`;
+            container.style.left = `${config.position.x}px`;
+            container.style.top = `${config.position.y}px`;
+
+            const totalDuration = config.durationMs;
+            const exitStart = totalDuration - 500;
+
+            animation = anime.timeline({
+                autoplay: false,
+                easing: 'linear'
+            });
+
+            // Enter animation
+            animation.add({
+                targets: container,
+                opacity: [0, 1],
+                translateY: [20, 0],
+                duration: 500,
+                easing: 'easeOutQuad'
+            }, 0);
+
+            // Subtle pulse on handle
+            animation.add({
+                targets: handleEl,
+                scale: [1, 1.02, 1],
+                duration: 1000,
+                easing: 'easeInOutSine'
+            }, 800);
+
+            // Exit animation
+            animation.add({
+                targets: container,
+                opacity: [1, 0],
+                translateY: [0, 20],
+                duration: 400,
+                easing: 'easeInQuad'
+            }, exitStart);
+
+            return animation;
+        }
+
+        function seekTo(timeMs) {
+            if (animation) animation.seek(timeMs);
+        }
+
+        function getDuration() {
+            return animation ? animation.duration : config.durationMs;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => initAnimation(config));
+    </script>
+</body>
+</html>

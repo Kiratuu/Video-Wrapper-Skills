@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Lower Third</title>
+    <link rel="stylesheet" href="../static/css/effects.css">
+    <link id="theme-css" rel="stylesheet" href="../static/css/theme-notion.css">
+    <style>
+        html, body {
+            width: 1920px;
+            height: 1080px;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            overflow: hidden;
+        }
+        .container {
+            position: relative;
+            width: 1920px;
+            height: 1080px;
+        }
+
+        /* Lower Third Base Styles */
+        .lower-third {
+            position: absolute;
+            bottom: 80px;
+            left: 60px;
+            display: flex;
+            align-items: flex-end;
+            gap: 16px;
+        }
+
+        .lower-third .accent-bar {
+            width: 4px;
+            height: 0;
+            border-radius: 2px;
+        }
+
+        .lower-third .content {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .lower-third .name {
+            font-size: 36px;
+            font-weight: 700;
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+
+        .lower-third .title-line {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+
+        .lower-third .role {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .lower-third .divider {
+            width: 1px;
+            height: 16px;
+            background: currentColor;
+            opacity: 0.4;
+        }
+
+        .lower-third .company {
+            font-size: 18px;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+
+        /* Theme: Notion */
+        .lower-third.theme-notion .accent-bar {
+            background: linear-gradient(180deg, #DFAB01, #E16259);
+        }
+        .lower-third.theme-notion .name {
+            color: #37352F;
+            font-family: "Georgia", "Noto Serif SC", serif;
+        }
+        .lower-third.theme-notion .role,
+        .lower-third.theme-notion .company {
+            color: #787774;
+            font-family: -apple-system, "PingFang SC", sans-serif;
+        }
+        .lower-third.theme-notion .content {
+            background: rgba(255, 253, 247, 0.95);
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        /* Theme: Cyberpunk */
+        .lower-third.theme-cyberpunk .accent-bar {
+            background: linear-gradient(180deg, #00F5FF, #FF00FF);
+            box-shadow: 0 0 20px #00F5FF;
+        }
+        .lower-third.theme-cyberpunk .name {
+            color: #00F5FF;
+            font-family: "Orbitron", sans-serif;
+            text-shadow: 0 0 10px #00F5FF;
+        }
+        .lower-third.theme-cyberpunk .role,
+        .lower-third.theme-cyberpunk .company {
+            color: #FF00FF;
+            font-family: "Courier New", monospace;
+        }
+        .lower-third.theme-cyberpunk .content {
+            background: rgba(13, 13, 13, 0.9);
+            padding: 16px 24px;
+            border: 1px solid #00F5FF;
+            border-radius: 4px;
+        }
+
+        /* Theme: Apple */
+        .lower-third.theme-apple .accent-bar {
+            display: none;
+        }
+        .lower-third.theme-apple .name {
+            color: #1D1D1F;
+            font-family: -apple-system, "SF Pro Display", sans-serif;
+        }
+        .lower-third.theme-apple .role,
+        .lower-third.theme-apple .company {
+            color: #86868B;
+            font-family: -apple-system, "SF Pro Text", sans-serif;
+        }
+        .lower-third.theme-apple .content {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 16px 24px;
+            border-radius: 12px;
+            backdrop-filter: blur(20px);
+        }
+
+        /* Theme: Aurora */
+        .lower-third.theme-aurora .accent-bar {
+            background: linear-gradient(180deg, #667EEA, #764BA2, #F093FB);
+        }
+        .lower-third.theme-aurora .name {
+            background: linear-gradient(135deg, #667EEA, #F093FB);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: "Avenir Next", sans-serif;
+        }
+        .lower-third.theme-aurora .role,
+        .lower-third.theme-aurora .company {
+            color: #B8B8D0;
+            font-family: -apple-system, sans-serif;
+        }
+        .lower-third.theme-aurora .content {
+            background: rgba(15, 15, 35, 0.9);
+            padding: 16px 24px;
+            border-radius: 12px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="lowerThird" class="lower-third theme-notion">
+            <div class="accent-bar"></div>
+            <div class="content">
+                <div class="name" id="nameText"></div>
+                <div class="title-line">
+                    <span class="role" id="roleText"></span>
+                    <span class="divider"></span>
+                    <span class="company" id="companyText"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../static/js/anime.min.js"></script>
+    <script>
+        let config = {
+            name: "Dario Amodei",
+            role: "CEO",
+            company: "Anthropic",
+            theme: "notion",
+            durationMs: 5000
+        };
+
+        let animation = null;
+
+        function initAnimation(cfg) {
+            config = cfg || config;
+
+            const container = document.getElementById('lowerThird');
+            const nameEl = document.getElementById('nameText');
+            const roleEl = document.getElementById('roleText');
+            const companyEl = document.getElementById('companyText');
+            const accentBar = container.querySelector('.accent-bar');
+
+            nameEl.textContent = config.name;
+            roleEl.textContent = config.role;
+            companyEl.textContent = config.company;
+            container.className = `lower-third theme-${config.theme || 'notion'}`;
+
+            const totalDuration = config.durationMs;
+            const enterDuration = 800;
+            const exitStart = totalDuration - 500;
+
+            animation = anime.timeline({
+                autoplay: false,
+                easing: 'linear'
+            });
+
+            // Accent bar grows
+            animation.add({
+                targets: accentBar,
+                height: [0, 80],
+                duration: 400,
+                easing: 'easeOutQuad'
+            }, 0);
+
+            // Name slides in
+            animation.add({
+                targets: nameEl,
+                opacity: [0, 1],
+                translateX: [-20, 0],
+                duration: 500,
+                easing: 'easeOutQuad'
+            }, 200);
+
+            // Title line slides in
+            animation.add({
+                targets: container.querySelector('.title-line'),
+                opacity: [0, 1],
+                translateX: [-20, 0],
+                duration: 500,
+                easing: 'easeOutQuad'
+            }, 400);
+
+            // Exit animation
+            animation.add({
+                targets: [nameEl, container.querySelector('.title-line')],
+                opacity: [1, 0],
+                translateX: [0, -20],
+                duration: 400,
+                easing: 'easeInQuad'
+            }, exitStart);
+
+            animation.add({
+                targets: accentBar,
+                height: [80, 0],
+                duration: 300,
+                easing: 'easeInQuad'
+            }, exitStart + 200);
+
+            return animation;
+        }
+
+        function seekTo(timeMs) {
+            if (animation) animation.seek(timeMs);
+        }
+
+        function getDuration() {
+            return animation ? animation.duration : config.durationMs;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => initAnimation(config));
+    </script>
+</body>
+</html>

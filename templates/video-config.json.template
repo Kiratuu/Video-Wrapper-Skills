@@ -1,0 +1,86 @@
+{
+  "keyPhrases": [
+    {
+      "text": "不喜欢AGI这个词",
+      "startMs": 2630,
+      "endMs": 7040,
+      "style": "emphasis"
+    },
+    {
+      "text": "技术非常强大",
+      "startMs": 7040,
+      "endMs": 11300,
+      "style": "emphasis"
+    },
+    {
+      "text": "我不是怀疑论者",
+      "startMs": 11310,
+      "endMs": 16370,
+      "style": "emphasis"
+    },
+    {
+      "text": "不会有突变时刻",
+      "startMs": 16640,
+      "endMs": 22820,
+      "style": "term"
+    },
+    {
+      "text": "过去15年的趋势",
+      "startMs": 23240,
+      "endMs": 28100,
+      "style": "emphasis"
+    },
+    {
+      "text": "平滑的指数增长",
+      "startMs": 28100,
+      "endMs": 37250,
+      "style": "term"
+    },
+    {
+      "text": "算力每18个月翻番",
+      "startMs": 37550,
+      "endMs": 45740,
+      "style": "number"
+    },
+    {
+      "text": "智能的摩尔定律",
+      "startMs": 45980,
+      "endMs": 54350,
+      "style": "term"
+    }
+  ],
+  "termDefinitions": [
+    {
+      "term": "AGI",
+      "english": "Artificial General Intelligence",
+      "chinese": "通用人工智能",
+      "description": "具有人类水平认知能力的AI系统，能够在所有领域理解、学习和广泛应用知识，不局限于单一任务。",
+      "firstAppearanceMs": 2630,
+      "displayDurationSeconds": 6
+    },
+    {
+      "term": "Superintelligence",
+      "english": "Superintelligence",
+      "chinese": "超级智能",
+      "description": "在所有方面超越人类智能的AI系统，包括创造力、通用智慧和问题解决能力，代表AI发展的最高阶段。",
+      "firstAppearanceMs": 7040,
+      "displayDurationSeconds": 8
+    },
+    {
+      "term": "Anthropic",
+      "english": "Anthropic",
+      "chinese": "Anthropic 公司",
+      "description": "由前OpenAI研究人员创立的AI安全公司，专注于构建可靠、可解释和可控的AI系统，开发了Claude系列模型。",
+      "firstAppearanceMs": 28100,
+      "displayDurationSeconds": 10
+    },
+    {
+      "term": "Moore's Law",
+      "english": "Moore's Law",
+      "chinese": "摩尔定律",
+      "description": "计算能力大约每18-24个月翻一番的观察规律，推动了技术的指数级增长，现在AI能力也呈现类似趋势。",
+      "firstAppearanceMs": 37550,
+      "displayDurationSeconds": 16
+    }
+  ]
+}

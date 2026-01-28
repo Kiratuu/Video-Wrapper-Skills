@@ -1,0 +1,164 @@
+/**
+ * Visual effects CSS for interview video processor
+ * Replaces PIL-based rendering with native CSS effects
+ */
+
+/* ===== Reset & Base ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: transparent;
+    overflow: hidden;
+}
+
+/* ===== Fancy Text Styles ===== */
+
+.fancy-text {
+    position: absolute;
+    font-family: "STHeiti", "Heiti SC", "Microsoft YaHei", "PingFang SC", sans-serif;
+    font-size: 52px;
+    font-weight: bold;
+    white-space: nowrap;
+    transform-origin: center center;
+}
+
+/* Style: emphasis - Yellow text with red stroke */
+.fancy-text.style-emphasis {
+    color: #FFED4E;
+    -webkit-text-stroke: 4px #FF1744;
+    text-shadow:
+        6px 6px 8px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(255, 23, 68, 0.3);
+    paint-order: stroke fill;
+}
+
+/* Style: term - Cyan text with magenta stroke */
+.fancy-text.style-term {
+    color: #00E5FF;
+    -webkit-text-stroke: 4px #E91E63;
+    text-shadow:
+        6px 6px 8px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(233, 30, 99, 0.3);
+    paint-order: stroke fill;
+}
+
+/* Style: number - Orange text with deep blue stroke */
+.fancy-text.style-number {
+    color: #FF6D00;
+    -webkit-text-stroke: 4px #1A237E;
+    text-shadow:
+        6px 6px 8px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(26, 35, 126, 0.3);
+    paint-order: stroke fill;
+}
+
+/* ===== Term Card Styles ===== */
+
+.term-card {
+    position: absolute;
+    width: 400px;
+    padding: 24px;
+    background: rgba(0, 0, 0, 0.85);
+    border-radius: 16px;
+    transform-origin: center center;
+    /* Glassmorphism effect */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Animated gradient border */
+.term-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 18px;
+    background: linear-gradient(
+        var(--border-angle, 0deg),
+        #FFD700,
+        #4ECDC4,
+        #FF6B6B,
+        #FFD700
+    );
+    z-index: -1;
+    animation: borderRotate 3s linear infinite;
+}
+
+@keyframes borderRotate {
+    0% { --border-angle: 0deg; }
+    100% { --border-angle: 360deg; }
+}
+
+/* For browsers that don't support @property */
+@supports not (background: linear-gradient(var(--border-angle, 0deg), red, blue)) {
+    .term-card::before {
+        background: linear-gradient(45deg, #FFD700, #4ECDC4, #FF6B6B, #FFD700);
+        background-size: 300% 300%;
+        animation: gradientShift 3s ease infinite;
+    }
+
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+}
+
+.term-card .title {
+    font-family: "STHeiti", "Heiti SC", "Microsoft YaHei", "PingFang SC", sans-serif;
+    font-size: 32px;
+    font-weight: bold;
+    color: #FFD700;
+    margin-bottom: 8px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.term-card .subtitle {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    color: #B0B0B0;
+    margin-bottom: 16px;
+}
+
+.term-card .description {
+    font-family: "STHeiti", "Heiti SC", "Microsoft YaHei", "PingFang SC", sans-serif;
+    font-size: 16px;
+    color: #E0E0E0;
+    line-height: 1.6;
+}
+
+/* Breathing animation for card */
+@keyframes breathe {
+    0%, 100% { transform: translateX(var(--breathe-x, 0px)); }
+    50% { transform: translateX(calc(var(--breathe-x, 0px) + 3px)); }
+}
+
+.term-card.breathing {
+    animation: breathe 2s ease-in-out infinite;
+}
+
+/* ===== Animation States ===== */
+
+/* Initial state for animations */
+.fancy-text.animate-init {
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.term-card.animate-init {
+    opacity: 0;
+    transform: translateX(100px) scale(0.8);
+}
+
+/* CSS custom property for border angle animation */
+@property --border-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}

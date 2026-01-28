@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Chapter Title</title>
+    <link rel="stylesheet" href="../static/css/effects.css">
+    <link id="theme-css" rel="stylesheet" href="../static/css/theme-notion.css">
+    <style>
+        html, body {
+            width: 1920px;
+            height: 1080px;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            overflow: hidden;
+        }
+        .container {
+            position: relative;
+            width: 1920px;
+            height: 1080px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chapter-title {
+            text-align: center;
+            opacity: 0;
+        }
+
+        .chapter-title .number {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            opacity: 0;
+        }
+
+        .chapter-title .title {
+            font-size: 64px;
+            font-weight: 700;
+            opacity: 0;
+        }
+
+        .chapter-title .subtitle {
+            font-size: 24px;
+            margin-top: 16px;
+            opacity: 0;
+        }
+
+        .chapter-title .line {
+            width: 0;
+            height: 3px;
+            margin: 24px auto 0;
+        }
+
+        /* Theme: Notion */
+        .chapter-title.theme-notion .number {
+            color: #E16259;
+            font-family: "SF Mono", monospace;
+        }
+        .chapter-title.theme-notion .title {
+            color: #37352F;
+            font-family: "Georgia", "Noto Serif SC", serif;
+        }
+        .chapter-title.theme-notion .subtitle {
+            color: #787774;
+            font-family: -apple-system, "PingFang SC", sans-serif;
+        }
+        .chapter-title.theme-notion .line {
+            background: linear-gradient(90deg, #DFAB01, #E16259);
+        }
+
+        /* Theme: Cyberpunk */
+        .chapter-title.theme-cyberpunk .number {
+            color: #FF00FF;
+            font-family: "Orbitron", monospace;
+            text-shadow: 0 0 10px #FF00FF;
+        }
+        .chapter-title.theme-cyberpunk .title {
+            color: #00F5FF;
+            font-family: "Orbitron", sans-serif;
+            text-shadow: 0 0 20px #00F5FF;
+        }
+        .chapter-title.theme-cyberpunk .subtitle {
+            color: #888;
+            font-family: "Courier New", monospace;
+        }
+        .chapter-title.theme-cyberpunk .line {
+            background: linear-gradient(90deg, #00F5FF, #FF00FF, #00F5FF);
+            box-shadow: 0 0 20px #00F5FF;
+        }
+
+        /* Theme: Apple */
+        .chapter-title.theme-apple .number {
+            color: #0071E3;
+            font-family: -apple-system, "SF Pro Text", sans-serif;
+        }
+        .chapter-title.theme-apple .title {
+            color: #1D1D1F;
+            font-family: -apple-system, "SF Pro Display", sans-serif;
+            font-weight: 600;
+        }
+        .chapter-title.theme-apple .subtitle {
+            color: #86868B;
+            font-family: -apple-system, "SF Pro Text", sans-serif;
+        }
+        .chapter-title.theme-apple .line {
+            background: #0071E3;
+        }
+
+        /* Theme: Aurora */
+        .chapter-title.theme-aurora .number {
+            background: linear-gradient(135deg, #F093FB, #F5576C);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: "SF Mono", monospace;
+        }
+        .chapter-title.theme-aurora .title {
+            background: linear-gradient(135deg, #667EEA, #764BA2, #F093FB);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: "Avenir Next", sans-serif;
+        }
+        .chapter-title.theme-aurora .subtitle {
+            color: #B8B8D0;
+            font-family: -apple-system, sans-serif;
+        }
+        .chapter-title.theme-aurora .line {
+            background: linear-gradient(90deg, #667EEA, #764BA2, #F093FB);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="chapterTitle" class="chapter-title theme-notion">
+            <div class="number" id="chapterNumber">Part 1</div>
+            <div class="title" id="titleText">章节标题</div>
+            <div class="subtitle" id="subtitleText">Chapter Subtitle</div>
+            <div class="line"></div>
+        </div>
+    </div>
+
+    <script src="../static/js/anime.min.js"></script>
+    <script>
+        let config = {
+            number: "Part 1",
+            title: "指数增长的本质",
+            subtitle: "The Nature of Exponential Growth",
+            theme: "notion",
+            durationMs: 4000
+        };
+
+        let animation = null;
+
+        function initAnimation(cfg) {
+            config = cfg || config;
+
+            const container = document.getElementById('chapterTitle');
+            const numberEl = document.getElementById('chapterNumber');
+            const titleEl = document.getElementById('titleText');
+            const subtitleEl = document.getElementById('subtitleText');
+            const lineEl = container.querySelector('.line');
+
+            numberEl.textContent = config.number || '';
+            titleEl.textContent = config.title;
+            subtitleEl.textContent = config.subtitle || '';
+            container.className = `chapter-title theme-${config.theme || 'notion'}`;
+
+            // Hide elements if not provided
+            numberEl.style.display = config.number ? 'block' : 'none';
+            subtitleEl.style.display = config.subtitle ? 'block' : 'none';
+
+            const totalDuration = config.durationMs;
+            const exitStart = totalDuration - 600;
+
+            animation = anime.timeline({
+                autoplay: false,
+                easing: 'linear'
+            });
+
+            // Container fade in
+            animation.add({
+                targets: container,
+                opacity: [0, 1],
+                duration: 300,
+                easing: 'easeOutQuad'
+            }, 0);
+
+            // Number
+            if (config.number) {
+                animation.add({
+                    targets: numberEl,
+                    opacity: [0, 1],
+                    translateY: [-20, 0],
+                    duration: 400,
+                    easing: 'easeOutQuad'
+                }, 100);
+            }
+
+            // Title
+            animation.add({
+                targets: titleEl,
+                opacity: [0, 1],
+                translateY: [30, 0],
+                duration: 600,
+                easing: 'spring(1, 180, 14, 0)'
+            }, 200);
+
+            // Subtitle
+            if (config.subtitle) {
+                animation.add({
+                    targets: subtitleEl,
+                    opacity: [0, 0.8],
+                    translateY: [20, 0],
+                    duration: 400,
+                    easing: 'easeOutQuad'
+                }, 500);
+            }
+
+            // Line expands
+            animation.add({
+                targets: lineEl,
+                width: [0, 120],
+                duration: 500,
+                easing: 'easeOutQuad'
+            }, 400);
+
+            // Exit
+            animation.add({
+                targets: container,
+                opacity: [1, 0],
+                scale: [1, 0.95],
+                duration: 500,
+                easing: 'easeInQuad'
+            }, exitStart);
+
+            return animation;
+        }
+
+        function seekTo(timeMs) {
+            if (animation) animation.seek(timeMs);
+        }
+
+        function getDuration() {
+            return animation ? animation.duration : config.durationMs;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => initAnimation(config));
+    </script>
+</body>
+</html>

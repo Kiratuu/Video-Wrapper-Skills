@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Fancy Text Effect</title>
+    <link rel="stylesheet" href="../static/css/effects.css">
+    <link id="theme-css" rel="stylesheet" href="../static/css/theme-notion.css">
+    <style>
+        html, body {
+            width: 1920px;
+            height: 1080px;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            overflow: hidden;
+        }
+        .container {
+            position: relative;
+            width: 1920px;
+            height: 1080px;
+        }
+        /* Import web fonts for themes */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700&display=swap');
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="fancyText" class="fancy-text animate-init"></div>
+    </div>
+
+    <script src="../static/js/anime.min.js"></script>
+    <script>
+        // Configuration will be injected by Playwright
+        let config = {
+            text: "示例文字",
+            style: "emphasis",
+            theme: "notion",
+            position: { x: 960, y: 300 },
+            durationMs: 2000
+        };
+
+        // Animation instance (global for frame seeking)
+        let animation = null;
+
+        // Available themes
+        const themes = ['cyberpunk', 'apple', 'notion', 'aurora'];
+
+        function setTheme(themeName) {
+            const themeLink = document.getElementById('theme-css');
+            if (themes.includes(themeName)) {
+                themeLink.href = `../static/css/theme-${themeName}.css`;
+            }
+        }
+
+        function initAnimation(cfg) {
+            config = cfg || config;
+
+            // Set theme
+            if (config.theme) {
+                setTheme(config.theme);
+            }
+
+            const textEl = document.getElementById('fancyText');
+            textEl.textContent = config.text;
+            textEl.className = `fancy-text theme-${config.theme || 'notion'} style-${config.style} animate-init`;
+
+            // Center the text at the specified position
+            textEl.style.left = `${config.position.x}px`;
+            textEl.style.top = `${config.position.y}px`;
+            textEl.style.transform = 'translate(-50%, -50%) scale(0.8)';
+
+            // Calculate animation durations
+            const totalDuration = config.durationMs;
+            const enterDuration = 600;
+            const exitStart = totalDuration - 300;
+            const exitDuration = 300;
+
+            // Create timeline animation
+            animation = anime.timeline({
+                autoplay: false,
+                easing: 'linear'
+            });
+
+            // Theme-specific animation adjustments
+            let enterScale = [0.8, 1.15];
+            let settleScale = [1.15, 1.0];
+            let wobbleRotate = [3, -3, 2, -2, 0];
+
+            if (config.theme === 'apple') {
+                // Apple: more subtle animation
+                enterScale = [0.95, 1.02];
+                settleScale = [1.02, 1.0];
+                wobbleRotate = [0, 0, 0, 0, 0];
+            } else if (config.theme === 'notion') {
+                // Notion: playful slight rotation
+                enterScale = [0.85, 1.05];
+                settleScale = [1.05, 1.0];
+                wobbleRotate = [2, -1, 1, -0.5, 0];
+            } else if (config.theme === 'aurora') {
+                // Aurora: smooth floating
+                enterScale = [0.9, 1.08];
+                settleScale = [1.08, 1.0];
+                wobbleRotate = [1, -1, 0.5, -0.5, 0];
+            }
+
+            // Enter animation
+            animation.add({
+                targets: textEl,
+                opacity: [0, 1],
+                scale: enterScale,
+                rotate: [0, wobbleRotate[0]],
+                duration: enterDuration,
+                easing: 'spring(1, 200, 12, 0)'
+            }, 0);
+
+            // Wobble animation
+            animation.add({
+                targets: textEl,
+                rotate: wobbleRotate,
+                duration: totalDuration - enterDuration - exitDuration,
+                easing: 'easeInOutSine'
+            }, enterDuration);
+
+            // Scale settle
+            animation.add({
+                targets: textEl,
+                scale: settleScale,
+                duration: 300,
+                easing: 'easeOutQuad'
+            }, enterDuration);
+
+            // Exit animation
+            animation.add({
+                targets: textEl,
+                opacity: [1, 0],
+                scale: [1.0, 0.9],
+                duration: exitDuration,
+                easing: 'easeInQuad'
+            }, exitStart);
+
+            return animation;
+        }
+
+        // Seek to specific time (for frame capture)
+        function seekTo(timeMs) {
+            if (animation) {
+                animation.seek(timeMs);
+            }
+        }
+
+        // Get total duration
+        function getDuration() {
+            return animation ? animation.duration : config.durationMs;
+        }
+
+        // Initialize with default config on load
+        document.addEventListener('DOMContentLoaded', () => {
+            initAnimation(config);
+        });
+    </script>
+</body>
+</html>

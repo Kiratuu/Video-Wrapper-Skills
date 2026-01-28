@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Bullet Points</title>
+    <link rel="stylesheet" href="../static/css/effects.css">
+    <link id="theme-css" rel="stylesheet" href="../static/css/theme-notion.css">
+    <style>
+        html, body {
+            width: 1920px;
+            height: 1080px;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            overflow: hidden;
+        }
+        .container {
+            position: relative;
+            width: 1920px;
+            height: 1080px;
+        }
+
+        .bullet-points {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding: 32px;
+            opacity: 0;
+        }
+
+        .bullet-points .title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .bullet-points .point {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+
+        .bullet-points .point .icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .bullet-points .point .icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .bullet-points .point .text {
+            font-size: 22px;
+            line-height: 1.4;
+        }
+
+        /* Theme: Notion */
+        .bullet-points.theme-notion {
+            background: rgba(255, 253, 247, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .bullet-points.theme-notion .title {
+            color: #37352F;
+            font-family: "Georgia", "Noto Serif SC", serif;
+        }
+        .bullet-points.theme-notion .icon {
+            color: #E16259;
+        }
+        .bullet-points.theme-notion .text {
+            color: #37352F;
+            font-family: -apple-system, "PingFang SC", sans-serif;
+        }
+
+        /* Theme: Cyberpunk */
+        .bullet-points.theme-cyberpunk {
+            background: rgba(13, 13, 13, 0.95);
+            border: 1px solid #00F5FF;
+            border-radius: 4px;
+        }
+        .bullet-points.theme-cyberpunk .title {
+            color: #00F5FF;
+            font-family: "Orbitron", sans-serif;
+            text-shadow: 0 0 10px #00F5FF;
+        }
+        .bullet-points.theme-cyberpunk .icon {
+            color: #FF00FF;
+        }
+        .bullet-points.theme-cyberpunk .text {
+            color: #FFF;
+            font-family: -apple-system, sans-serif;
+        }
+
+        /* Theme: Apple */
+        .bullet-points.theme-apple {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+        }
+        .bullet-points.theme-apple .title {
+            color: #1D1D1F;
+            font-family: -apple-system, "SF Pro Display", sans-serif;
+            font-weight: 600;
+        }
+        .bullet-points.theme-apple .icon {
+            color: #0071E3;
+        }
+        .bullet-points.theme-apple .text {
+            color: #1D1D1F;
+            font-family: -apple-system, "SF Pro Text", "PingFang SC", sans-serif;
+        }
+
+        /* Theme: Aurora */
+        .bullet-points.theme-aurora {
+            background: rgba(15, 15, 35, 0.9);
+            border-radius: 16px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+        .bullet-points.theme-aurora .title {
+            background: linear-gradient(135deg, #667EEA, #F093FB);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: "Avenir Next", sans-serif;
+        }
+        .bullet-points.theme-aurora .icon {
+            color: #F093FB;
+        }
+        .bullet-points.theme-aurora .text {
+            color: #FFF;
+            font-family: -apple-system, "PingFang SC", sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="bulletPoints" class="bullet-points theme-notion">
+            <div class="title" id="titleText"></div>
+            <div id="pointsContainer"></div>
+        </div>
+    </div>
+
+    <script src="../static/js/anime.min.js"></script>
+    <script>
+        let config = {
+            title: "核心观点",
+            points: [
+                "AI 发展是平滑的指数曲线",
+                "类似摩尔定律的智能增长",
+                "没有突然的奇点时刻"
+            ],
+            theme: "notion",
+            position: { x: 100, y: 300 },
+            durationMs: 6000
+        };
+
+        let animation = null;
+
+        const checkIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+
+        function initAnimation(cfg) {
+            config = cfg || config;
+
+            const container = document.getElementById('bulletPoints');
+            const titleEl = document.getElementById('titleText');
+            const pointsContainer = document.getElementById('pointsContainer');
+
+            titleEl.textContent = config.title || '';
+            titleEl.style.display = config.title ? 'block' : 'none';
+
+            // Clear and rebuild points
+            pointsContainer.innerHTML = '';
+            config.points.forEach((point, index) => {
+                const pointEl = document.createElement('div');
+                pointEl.className = 'point';
+                pointEl.innerHTML = `
+                    <span class="icon">${checkIcon}</span>
+                    <span class="text">${point}</span>
+                `;
+                pointsContainer.appendChild(pointEl);
+            });
+
+            container.className = `bullet-points theme-${config.theme || 'notion'}`;
+            container.style.left = `${config.position.x}px`;
+            container.style.top = `${config.position.y}px`;
+
+            const totalDuration = config.durationMs;
+            const exitStart = totalDuration - 600;
+            const points = container.querySelectorAll('.point');
+
+            animation = anime.timeline({
+                autoplay: false,
+                easing: 'linear'
+            });
+
+            // Container appears
+            animation.add({
+                targets: container,
+                opacity: [0, 1],
+                duration: 300,
+                easing: 'easeOutQuad'
+            }, 0);
+
+            // Each point animates in sequentially
+            points.forEach((point, index) => {
+                animation.add({
+                    targets: point,
+                    opacity: [0, 1],
+                    translateX: [-20, 0],
+                    duration: 400,
+                    easing: 'easeOutQuad'
+                }, 300 + index * 400);
+            });
+
+            // Exit
+            animation.add({
+                targets: container,
+                opacity: [1, 0],
+                translateX: [0, -20],
+                duration: 500,
+                easing: 'easeInQuad'
+            }, exitStart);
+
+            return animation;
+        }
+
+        function seekTo(timeMs) {
+            if (animation) animation.seek(timeMs);
+        }
+
+        function getDuration() {
+            return animation ? animation.duration : config.durationMs;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => initAnimation(config));
+    </script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+/**
+ * Cyberpunk Neon Theme
+ * 霓虹发光效果，青色/品红双色光晕
+ */
+
+:root {
+    --primary: #00F5FF;
+    --secondary: #FF00FF;
+    --accent: #FFFF00;
+    --bg-dark: #0D0D0D;
+    --bg-card: rgba(13, 13, 13, 0.85);
+    --text-light: #FFFFFF;
+    --text-muted: #888888;
+}
+
+/* ===== Fancy Text - Cyberpunk ===== */
+
+.fancy-text.theme-cyberpunk {
+    font-family: "Orbitron", "STHeiti", "Heiti SC", sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.fancy-text.theme-cyberpunk.style-emphasis {
+    color: var(--primary);
+    text-shadow:
+        0 0 10px var(--primary),
+        0 0 20px var(--primary),
+        0 0 40px var(--primary),
+        0 0 80px var(--secondary);
+    -webkit-text-stroke: none;
+}
+
+.fancy-text.theme-cyberpunk.style-term {
+    color: var(--secondary);
+    text-shadow:
+        0 0 10px var(--secondary),
+        0 0 20px var(--secondary),
+        0 0 40px var(--secondary),
+        0 0 80px var(--primary);
+    -webkit-text-stroke: none;
+}
+
+.fancy-text.theme-cyberpunk.style-number {
+    color: var(--accent);
+    text-shadow:
+        0 0 10px var(--accent),
+        0 0 20px var(--accent),
+        0 0 40px var(--primary);
+    -webkit-text-stroke: none;
+}
+
+/* ===== Term Card - Cyberpunk ===== */
+
+.term-card.theme-cyberpunk {
+    background: var(--bg-card);
+    border: 1px solid var(--primary);
+    border-radius: 4px;
+    box-shadow:
+        0 0 20px rgba(0, 245, 255, 0.3),
+        inset 0 0 20px rgba(0, 245, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.term-card.theme-cyberpunk::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+        var(--border-angle, 0deg),
+        var(--primary),
+        var(--secondary),
+        var(--primary)
+    );
+    border-radius: 6px;
+    z-index: -1;
+    opacity: 0.8;
+    animation: borderGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes borderGlow {
+    0% { opacity: 0.5; filter: blur(2px); }
+    100% { opacity: 1; filter: blur(4px); }
+}
+
+.term-card.theme-cyberpunk .title {
+    color: var(--primary);
+    font-family: "Orbitron", "STHeiti", sans-serif;
+    font-weight: 700;
+    text-shadow: 0 0 10px var(--primary);
+    letter-spacing: 0.05em;
+}
+
+.term-card.theme-cyberpunk .subtitle {
+    color: var(--secondary);
+    font-family: "Courier New", monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.term-card.theme-cyberpunk .description {
+    color: var(--text-light);
+    font-family: "STHeiti", sans-serif;
+    opacity: 0.9;
+}

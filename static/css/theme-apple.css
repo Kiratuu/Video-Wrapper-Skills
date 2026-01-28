@@ -1,0 +1,81 @@
+/**
+ * Apple Minimalist Theme
+ * 极简设计，纯净配色，精致排版
+ */
+
+:root {
+    --primary: #1D1D1F;
+    --secondary: #86868B;
+    --accent: #0071E3;
+    --bg-light: rgba(255, 255, 255, 0.72);
+    --bg-dark: rgba(29, 29, 31, 0.72);
+    --text-dark: #1D1D1F;
+    --text-light: #FFFFFF;
+}
+
+/* ===== Fancy Text - Apple ===== */
+
+.fancy-text.theme-apple {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.fancy-text.theme-apple.style-emphasis {
+    color: var(--text-light);
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+    -webkit-text-stroke: none;
+}
+
+.fancy-text.theme-apple.style-term {
+    color: var(--text-light);
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+    -webkit-text-stroke: none;
+}
+
+.fancy-text.theme-apple.style-number {
+    color: var(--accent);
+    text-shadow: 0 2px 20px rgba(0, 113, 227, 0.4);
+    -webkit-text-stroke: none;
+}
+
+/* ===== Term Card - Apple ===== */
+
+.term-card.theme-apple {
+    background: var(--bg-light);
+    border: none;
+    border-radius: 18px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.term-card.theme-apple::before {
+    display: none;
+}
+
+.term-card.theme-apple .title {
+    color: var(--text-dark);
+    font-family: -apple-system, "SF Pro Display", "PingFang SC", sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    letter-spacing: -0.02em;
+    text-shadow: none;
+}
+
+.term-card.theme-apple .subtitle {
+    color: var(--secondary);
+    font-family: -apple-system, "SF Pro Text", sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0;
+}
+
+.term-card.theme-apple .description {
+    color: var(--text-dark);
+    font-family: -apple-system, "SF Pro Text", "PingFang SC", sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.5;
+    opacity: 0.8;
+}
